@@ -116,6 +116,7 @@ open class SideMenuTransition: UIPercentDrivenInteractiveTransition {
             
             if let menuViewController = SideMenuTransition.presentDirection == .left ? SideMenuManager.menuLeftNavigationController : SideMenuManager.menuRightNavigationController,
                 let visibleViewController = visibleViewController {
+             	 SideMenuManager.menuTransitionDelegate?.panGestureStarted?(from: SideMenuTransition.presentDirection)
                 singleton.interactive = true
                 visibleViewController.present(menuViewController, animated: true, completion: nil)
             } else {
@@ -208,6 +209,8 @@ open class SideMenuTransition: UIPercentDrivenInteractiveTransition {
                 return
         }
       
+        SideMenuManager.menuTransitionDelegate?.menuWillHide?(from: SideMenuTransition.presentDirection)
+      
         menuView.transform = CGAffineTransform.identity
         mainViewController.view.transform = CGAffineTransform.identity
         mainViewController.view.alpha = 1
@@ -247,7 +250,7 @@ open class SideMenuTransition: UIPercentDrivenInteractiveTransition {
             let menuView = SideMenuTransition.presentDirection == .left ? SideMenuManager.menuLeftNavigationController?.view : SideMenuManager.menuRightNavigationController?.view else {
                 return
         }
-
+        SideMenuManager.menuTransitionDelegate?.menuDidHide?(from: SideMenuTransition.presentDirection)
         SideMenuTransition.tapView?.removeFromSuperview()
         SideMenuTransition.statusBarView?.removeFromSuperview()
         mainViewController.view.motionEffects.removeAll()
@@ -264,6 +267,7 @@ open class SideMenuTransition: UIPercentDrivenInteractiveTransition {
             let mainViewController = SideMenuTransition.viewControllerForPresentedMenu else {
                 return
         }
+        SideMenuManager.menuTransitionDelegate?.menuWillShow?(from: SideMenuTransition.presentDirection)
         
         menuView.transform = CGAffineTransform.identity
         mainViewController.view.transform = CGAffineTransform.identity
@@ -315,6 +319,7 @@ open class SideMenuTransition: UIPercentDrivenInteractiveTransition {
             return
         }
       
+        SideMenuManager.menuTransitionDelegate?.menuDidShow?(from: SideMenuTransition.presentDirection)
         switch SideMenuManager.menuPresentMode {
         case .menuSlideIn, .menuDissolveIn, .viewSlideInOut:
             if SideMenuManager.menuParallaxStrength != 0 {

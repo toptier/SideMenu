@@ -16,6 +16,14 @@
      SideMenuManager.menuAddScreenEdgePanGesturesToPresent(toView: self.navigationController!.view)
 */
 
+@objc public protocol SideMenuTransitionDelegate: class {
+  @objc optional func panGestureStarted(from direction: UIRectEdge)
+  @objc optional func menuWillShow(from direction: UIRectEdge)
+  @objc optional func menuDidShow(from direction: UIRectEdge)
+  @objc optional func menuWillHide(from direction: UIRectEdge)
+  @objc optional func menuDidHide(from direction: UIRectEdge)
+}
+
 open class SideMenuManager : NSObject {
     
     @objc public enum MenuPushStyle : Int {
@@ -120,6 +128,8 @@ open class SideMenuManager : NSObject {
     
     /// The animation initial spring velocity when a menu is displayed. Ignored when displayed with a gesture.
     open static var menuAnimationInitialSpringVelocity: CGFloat = 1
+  
+    open static weak var menuTransitionDelegate: SideMenuTransitionDelegate?
     
     /// -Warning: Deprecated. Use `menuPushStyle = .subMenu` instead.
     @available(*, deprecated, renamed: "menuPushStyle", message: "Use `menuPushStyle = .subMenu` instead.")
