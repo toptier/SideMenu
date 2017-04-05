@@ -25,6 +25,7 @@ class MainViewController: UIViewController {
     }
     
     fileprivate func setupSideMenu() {
+      SideMenuManager.menuTransitionDelegate = self
         // Define the menus
         SideMenuManager.menuLeftNavigationController = storyboard!.instantiateViewController(withIdentifier: "LeftMenuNavigationController") as? UISideMenuNavigationController
         SideMenuManager.menuRightNavigationController = storyboard!.instantiateViewController(withIdentifier: "RightMenuNavigationController") as? UISideMenuNavigationController
@@ -89,4 +90,27 @@ class MainViewController: UIViewController {
     @IBAction fileprivate func changeSwitch(_ switchControl: UISwitch) {
         SideMenuManager.menuFadeStatusBar = switchControl.isOn
     }
+}
+
+extension MainViewController: SideMenuTransitionDelegate {
+
+  func panGestureStarted(from direction: UIRectEdge) {
+    print("PAN")
+  }
+  
+  func menuDidHide(from direction: UIRectEdge) {
+    print("DID HIDE")
+  }
+  
+  func menuDidShow(from direction: UIRectEdge) {
+    print("DID SHOW")
+  }
+  
+  func menuWillHide(from direction: UIRectEdge) {
+    print("WILL HIDE")
+  }
+  
+  func menuWillShow(from direction: UIRectEdge) {
+    print("WILL SHOW")
+  }
 }
